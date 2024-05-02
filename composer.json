@@ -1,0 +1,17 @@
+{
+    "name": "codemastercarlos/receipt",
+    "description": "Projeto inicial para guardar seus comprovantes de pagamento.",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Codemastercarlos\\Receipt\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Carlos Alexandre",
+            "email": "carlos24106k@gmail.com"
+        }
+    ],
+    "require": {}
+}
