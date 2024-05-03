@@ -1,5 +1,6 @@
 <?php
 
+use Psr\Http\Server\RequestHandlerInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ResponseInterface;
@@ -25,7 +26,13 @@ try {
 
     $route = $routes[$httpMethod][$pathInfo];
     if (isset($route)) {
+        /** @var RequestHandlerInterface $controller */
         $controller = new $route['controller']();
+
+        if (is_subclass_of($controller, RequestHandlerInterface::class) === false) {
+            throw new LogicException("O controlador {$route['controller']} deve implementar a classe RequestHandlerInterface");
+        }
+
         $action = $route['action'];
 
         /** @var ResponseInterface $response */
