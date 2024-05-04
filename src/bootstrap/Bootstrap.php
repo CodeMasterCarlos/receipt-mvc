@@ -6,9 +6,11 @@ use Equip\Dispatch\MiddlewareCollection;
 use LogicException;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Throwable;
 
 class Bootstrap
 {
@@ -24,20 +26,16 @@ class Bootstrap
 
     private MiddlewareCollection $middlewares;
 
-    public function __construct(private array $routes, private array $middlewaresNames)
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function __construct(private readonly array $routes, private readonly array $middlewaresNames, private readonly ContainerInterface $diContainer)
     {
-        try {
-            $this->setInfoRequest();
-            $this->setServerRequest();
+        $this->setInfoRequest();
+        $this->setServerRequest();
 
-            $this->validationRoute();
-
-        } catch(Throwable $e) {
-            echo '<h1>' . $e->getMessage() . '</h1>';
-            echo '<p>' . $e->getLine() . '</p>';
-            echo '<p>' . $e->getFile() . '</p>';
-            exit();
-        }
+        $this->validationRoute();
     }
 
     private function setInfoRequest(): void
@@ -60,6 +58,10 @@ class Bootstrap
         $this->request = $creator->fromGlobals();
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     private function validationRoute(): void
     {
         $route = $this->routes[$this->httpMethod][$this->path];
@@ -73,10 +75,15 @@ class Bootstrap
         }
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     private function createController($route): void
     {
         /** @var RequestHandlerInterface $controller */
-        $controller = new $route['controller']();
+        $controller = $this->diContainer->get($route['controller']);
+
         $this->action = $route['action'];
 
         if (is_subclass_of($controller, RequestHandlerInterface::class) === false) {
