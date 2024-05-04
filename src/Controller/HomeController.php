@@ -13,9 +13,4 @@ class HomeController implements RequestHandlerInterface
     {
         return new Response(200, body: "HOME");
     }
-
-    public function store(ServerRequestInterface $request): ResponseInterface
-    {
-        return new Response(200, body: "HOMESTORE");
-    }
 }

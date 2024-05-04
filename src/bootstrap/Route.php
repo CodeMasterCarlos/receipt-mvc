@@ -8,14 +8,14 @@ class Route
 {
     private static array $routes = [];
 
-    public static function get(string $route, string $controller, string $action = 'handle'): void
+    public static function get(string $route, string $controller, string $action = 'handle', array $middlewares = []): void
     {
-        self::createRoute('get', $route, $controller, $action);
+        self::createRoute('get', $route, $controller, $action, $middlewares);
     }
 
-    public static function post(string $route, string $controller, string $action = 'handle'): void
+    public static function post(string $route, string $controller, string $action = 'handle', array $middlewares = []): void
     {
-        self::createRoute('post', $route, $controller, $action);
+        self::createRoute('post', $route, $controller, $action, $middlewares);
     }
 
     public static function getRoutes(): array
@@ -30,7 +30,7 @@ class Route
         }
     }
 
-    private static function createRoute(string $method, string $route, string $controller, string $action): void
+    private static function createRoute(string $method, string $route, string $controller, string $action, array $middlewares): void
     {
         if (isset(self::$routes[$method][$route])) {
             throw new InvalidArgumentException("Rota duplicada: '$route' já está registrada.");
@@ -41,6 +41,7 @@ class Route
             'route' => $route,
             'controller' => $controller,
             'action' => $action,
+            'middlewares' => $middlewares,
         ];
     }
 }
