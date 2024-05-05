@@ -1,6 +1,6 @@
 <?php
 
-namespace Codemastercarlos\Receipt\bootstrap;
+namespace Codemastercarlos\Receipt\Bootstrap;
 
 use InvalidArgumentException;
 

@@ -2,7 +2,7 @@
 
 namespace Codemastercarlos\Receipt\Controller;
 
-use Codemastercarlos\Receipt\bootstrap\View;
+use Codemastercarlos\Receipt\Bootstrap\View;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

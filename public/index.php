@@ -1,6 +1,6 @@
 <?php
 
-use Codemastercarlos\Receipt\bootstrap\Bootstrap;
+use Codemastercarlos\Receipt\Bootstrap\Bootstrap;
 use Psr\Container\ContainerInterface;
 
 require_once __DIR__ . '/../vendor/autoload.php';

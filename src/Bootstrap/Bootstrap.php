@@ -1,6 +1,6 @@
 <?php
 
-namespace Codemastercarlos\Receipt\bootstrap;
+namespace Codemastercarlos\Receipt\Bootstrap;
 
 use Codemastercarlos\Receipt\Controller\ErrorController;
 use Codemastercarlos\Receipt\Controller\NotFoundController;
@@ -17,6 +17,8 @@ use Throwable;
 
 class Bootstrap
 {
+    use Logger;
+
     private string $path;
 
     private string $httpMethod;
@@ -36,12 +38,20 @@ class Bootstrap
 
         try {
             $this->validationRoute();
+            $this->response();
         } catch (Throwable $e) {
-            $this->controller = new ErrorController();
-            $this->action = "handle";
-            $this->middlewares = new MiddlewareCollection([]);
+            $this->reportError($e);
         }
+    }
 
+    private function reportError(Throwable $e): void
+    {
+        $this->logger()->error($e->getMessage(), ["exception" => $e]);
+
+        $message = $_ENV['APP'] === "production" ? "" : $e->getMessage();
+        $this->controller = new ErrorController($message);
+        $this->action = "handle";
+        $this->middlewares = new MiddlewareCollection([]);
         $this->response();
     }
 
@@ -103,8 +113,11 @@ class Bootstrap
 
     private function createCollectionMiddlewares($middlewares): void
     {
-        $middleware = array_map(function(string $middleware) {
-            return new $this->middlewaresNames[$middleware]();
+        $middleware = array_map(/**
+         * @throws ContainerExceptionInterface
+         * @throws NotFoundExceptionInterface
+         */ function(string $middleware) {
+            return $this->diContainer->get($this->middlewaresNames[$middleware]);
         }, $middlewares);
 
         $this->middlewares = new MiddlewareCollection($middleware);

@@ -1,6 +1,6 @@
 <?php
 
-use Codemastercarlos\Receipt\bootstrap\Route;
+use Codemastercarlos\Receipt\Bootstrap\Route;
 
 Route::run([
     "web.php",
