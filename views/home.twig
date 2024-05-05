@@ -1,0 +1,40 @@
+{% extends "layouts/main.twig" %}
+{% import 'components/header.twig' as header %}
+{% import 'components/card.twig' as card %}
+
+{% block title %}Meus comprovantes{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/card.css">
+{% endblock %}
+
+{% block content %}
+    {{ header.render() }}
+
+    <section>
+        <div class="container mb-5">
+            <h1 class="title">Olá <span class="text-primary">Carlos</span></h1>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <h1 class="title">Meus comprovantes</h1>
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    {{ card.render() }}
+                </div>
+                <div class="col-md-3">
+                    {{ card.render() }}
+                </div>
+                <div class="col-md-3">
+                    {{ card.render() }}
+                </div>
+                <div class="col-md-3">
+                    {{ card.render() }}
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

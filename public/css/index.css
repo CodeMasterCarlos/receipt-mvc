@@ -1,3 +1,8 @@
-h1 {
-    background: #9000ff;
+body #app > section {
+    margin-top: 2rem;
+}
+
+.title {
+    margin-top: 20px;
+    font-size: 1.6rem;
 }

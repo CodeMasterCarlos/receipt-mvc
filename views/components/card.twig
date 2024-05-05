@@ -1,10 +1,13 @@
-{% macro render(text) %}
-<div class="card">
-    <h5 class="card-header">{{ text }}</h5>
-    <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+{% macro render(id, image, title, path) %}
+    <div class="card mb-4">
+        <img src="https://images.unsplash.com/photo-1714836986273-9a62b37f55fa?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">/2024/05/sabesp/</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/receipt-edit?id={{ id }}" class="btn btn-sm btn-primary">Editar</a>
+                <a href="/receipt-remove?id={{ id }}" class="btn btn-sm btn-danger">Remover</a>
+            </div>
+        </div>
     </div>
-</div>
 {% endmacro %}

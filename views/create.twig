@@ -1,0 +1,23 @@
+{% extends "layouts/main.twig" %}
+{% import 'components/header.twig' as header %}
+{% import 'components/form.twig' as form %}
+
+{% block title %}Adicionar comprovante{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/card.css">
+{% endblock %}
+
+{% block content %}
+    {{ header.render() }}
+
+    <main>
+        <div class="container">
+            <h1 class="title">Adicionar comprovante</h1>
+            <form action="/receipt/create" method="post" enctype="multipart/form-data">
+                {{ form.render() }}
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

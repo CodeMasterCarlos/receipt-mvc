@@ -1,0 +1,19 @@
+{% extends "layouts/main.twig" %}
+{% import 'components/header.twig' as header %}
+{% import 'components/form.twig' as form %}
+
+{% block title %}Editar comprovante{% endblock %}
+
+{% block content %}
+    {{ header.render() }}
+
+    <main>
+        <div class="container">
+            <h1 class="title">Editar comprovante</h1>
+            <form action="/receipt/edit?id=" method="post" enctype="multipart/form-data">
+                {{ form.render('Título', '2024-05-05') }}
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

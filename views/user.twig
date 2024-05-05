@@ -1,0 +1,30 @@
+{% extends "layouts/main.twig" %}
+{% import 'components/header.twig' as header %}
+
+{% block title %}Minha conta{% endblock %}
+
+{% block content %}
+    {{ header.render() }}
+
+    <main>
+        <div class="container">
+            <h1 class="title">Minha conta</h1>
+            <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nome:</label>
+                    <input type="text" class="form-control" id="name" value="Carlos">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" value="carlos@example.com">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Senha:</label>
+                    <input type="password" class="form-control" id="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+        </div>
+    </main>
+
+{% endblock %}

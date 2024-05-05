@@ -9,18 +9,11 @@ $routes = require __DIR__ . '/../routes/routes.php';
 
 $middlewares = require __DIR__ . '/../config/Middlewares.php';
 
-try {
-    $builder = require __DIR__ . '/../config/DiContainer.php';
-    /** @var ContainerInterface $container */
-    $diContainer = $builder->build();
+$builder = require __DIR__ . '/../config/DiContainer.php';
+/** @var ContainerInterface $container */
+$diContainer = $builder->build();
 
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-    $dotenv->load();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 
-    new Bootstrap($routes, $middlewares, $diContainer);
-} catch(Throwable $e) {
-    echo '<h1>' . $e->getMessage() . '</h1>';
-    echo '<p>' . $e->getLine() . '</p>';
-    echo '<p>' . $e->getFile() . '</p>';
-    exit();
-}
+new Bootstrap($routes, $middlewares, $diContainer);

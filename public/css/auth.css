@@ -1,0 +1,8 @@
+.jumbotron-container {
+    max-width: 700px;
+    margin: auto;
+}
+
+.auth-link {
+    text-decoration: none;
+}

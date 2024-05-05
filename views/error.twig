@@ -1,0 +1,25 @@
+{% extends "layouts/main.twig" %}
+{% import 'components/header.twig' as header %}
+{% import 'components/card.twig' as card %}
+
+{% block title %}Ops! Algo deu errado{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/jumbotron.css">
+{% endblock %}
+
+{% block content %}
+    <main class="jumbotron-container">
+        <div class="container">
+            <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
+                <button type="button" class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill" aria-label="Close"></button>
+                <i class="fa-solid fa-bug fa-5x mb-2"></i>
+                <h1 class="text-body-emphasis">Ops! Algo deu errado em nosso servidor</h1>
+                <p class="col-lg-6 mx-auto mb-4">Infelizmente, encontramos um erro interno ao processar sua solicitação. Mas não se preocupe, você pode retornar à página inicial com apenas um clique.</p>
+                <a class="btn btn-primary px-5 mb-5" href="/">
+                    Voltar para home
+                </a>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layouts/main.twig" %}
+{% import 'components/header.twig' as header %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/jumbotron.css">
+    <link rel="stylesheet" href="/css/auth.css">
+{% endblock %}
+
+{% block title %}Registrar nova conta{% endblock %}
+
+{% block content %}
+    <main class="jumbotron-container">
+        <div class="container">
+            <div class="position-relative p-1 text-muted bg-body border border-dashed rounded-5">
+                <h1 class="title text-center">Registrar nova conta</h1>
+                <form class="p-3">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome:</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha:</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-end">
+                        <a href="/login" class="auth-link">Já tem uma conta? Entre agora</a>
+                    </div>
+                    <div class="d-flex justify-content-end mt-5">
+                        <button type="submit" class="btn btn-success w-50">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

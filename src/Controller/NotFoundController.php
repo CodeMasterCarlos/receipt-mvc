@@ -11,7 +11,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class HomeController implements RequestHandlerInterface
+class NotFoundController implements RequestHandlerInterface
 {
     use View;
 
@@ -22,16 +22,6 @@ class HomeController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return new Response(200, body: $this->render('home'));
-    }
-
-    /**
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws LoaderError
-     */
-    public function create(ServerRequestInterface $request): ResponseInterface
-    {
-        return new Response(200, body: $this->render('create'));
+        return new Response(404, body: $this->render('not-found'));
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Codemastercarlos\Receipt\bootstrap;
 
+use Codemastercarlos\Receipt\Controller\ErrorController;
+use Codemastercarlos\Receipt\Controller\NotFoundController;
 use Equip\Dispatch\MiddlewareCollection;
 use LogicException;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -11,6 +13,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Throwable;
 
 class Bootstrap
 {
@@ -26,16 +29,20 @@ class Bootstrap
 
     private MiddlewareCollection $middlewares;
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function __construct(private readonly array $routes, private readonly array $middlewaresNames, private readonly ContainerInterface $diContainer)
     {
         $this->setInfoRequest();
         $this->setServerRequest();
 
-        $this->validationRoute();
+        try {
+            $this->validationRoute();
+        } catch (Throwable $e) {
+            $this->controller = new ErrorController();
+            $this->action = "handle";
+            $this->middlewares = new MiddlewareCollection([]);
+        }
+
+        $this->response();
     }
 
     private function setInfoRequest(): void
@@ -66,38 +73,39 @@ class Bootstrap
     {
         $route = $this->routes[$this->httpMethod][$this->path];
         if (isset($route)) {
-            $this->createController($route);
-            $this->createCollectionMiddlewares($route);
-
-            $this->response();
+            $this->createController($route['controller'], $route['action']);
+            $listMiddlewares = $route['middlewares'];
         } else {
-            echo '<h1>404, NOT FOUND!</h1>';
+            $this->createController(NotFoundController::class, 'handle');
+            $listMiddlewares = [];
         }
+
+        $this->createCollectionMiddlewares($listMiddlewares);
     }
 
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    private function createController($route): void
+    private function createController($controllerName, $action): void
     {
         /** @var RequestHandlerInterface $controller */
-        $controller = $this->diContainer->get($route['controller']);
+        $controller = $this->diContainer->get($controllerName);
 
-        $this->action = $route['action'];
+        $this->action = $action;
 
         if (is_subclass_of($controller, RequestHandlerInterface::class) === false) {
-            throw new LogicException("O controller {$route['controller']} deve implementar a interface RequestHandlerInterface");
+            throw new LogicException("O controller $controllerName deve implementar a interface RequestHandlerInterface");
         }
 
         $this->controller = $controller;
     }
 
-    private function createCollectionMiddlewares($route): void
+    private function createCollectionMiddlewares($middlewares): void
     {
         $middleware = array_map(function(string $middleware) {
             return new $this->middlewaresNames[$middleware]();
-        }, $route['middlewares']);
+        }, $middlewares);
 
         $this->middlewares = new MiddlewareCollection($middleware);
     }
