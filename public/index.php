@@ -3,6 +3,8 @@
 use Codemastercarlos\Receipt\Bootstrap\Bootstrap;
 use Psr\Container\ContainerInterface;
 
+$_SESSION ?? session_start();
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $routes = require __DIR__ . '/../routes/routes.php';
