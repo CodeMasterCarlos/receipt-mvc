@@ -14,3 +14,4 @@ Route::get('/search', SearchController::class);
 Route::get('/user', UserController::class);
 Route::get('/login', LoginController::class);
 Route::get('/register', RegisterController::class);
+Route::post('/register', RegisterController::class, 'store');

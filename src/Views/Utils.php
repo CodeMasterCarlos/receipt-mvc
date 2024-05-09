@@ -23,4 +23,12 @@ class Utils
     {
         return $this->getFlasherMessage();
     }
+
+    public function valueParams(): array
+    {
+        $values = $_SESSION['receipt']['validation']['params'] ?? [];
+
+        unset($_SESSION['receipt']['validation']['params']);
+        return $values;
+    }
 }
