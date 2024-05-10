@@ -31,4 +31,9 @@ class Utils
         unset($_SESSION['receipt']['validation']['params']);
         return $values;
     }
+
+    public function getParamQuery($name): string
+    {
+        return filter_input(INPUT_GET, $name) ?? "";
+    }
 }

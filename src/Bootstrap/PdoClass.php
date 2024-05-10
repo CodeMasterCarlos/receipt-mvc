@@ -12,6 +12,9 @@ class PdoClass
         $user = $_ENV['DB_USERNAME'];
         $password = $_ENV['DB_PASSWORD'];
 
-        return new PDO("mysql:host23=$host;dbname=$database", $user, $password);
+        $pdo = new PDO("mysql:host23=$host;dbname=$database", $user, $password);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+        return $pdo;
     }
 }
