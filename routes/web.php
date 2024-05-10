@@ -9,10 +9,11 @@ use Codemastercarlos\Receipt\Controller\SearchController;
 use Codemastercarlos\Receipt\Controller\UserController;
 
 Route::get('/', HomeController::class, middlewares: ['web']);
-Route::get('/receipt/create', HomeController::class, 'create');
-Route::get('/search', SearchController::class);
-Route::get('/user', UserController::class);
-Route::get('/login', LoginController::class);
-Route::post('/login', LoginController::class, 'store');
-Route::get('/register', RegisterController::class);
-Route::post('/register', RegisterController::class, 'store');
+Route::get('/receipt/create', HomeController::class, 'create', ['web']);
+Route::get('/search', SearchController::class, middlewares: ['web']);
+Route::get('/user', UserController::class, middlewares: ['web']);
+
+Route::get('/login', LoginController::class, middlewares: ['guest']);
+Route::post('/login', LoginController::class, 'store', ['guest']);
+Route::get('/register', RegisterController::class, middlewares: ['guest']);
+Route::post('/register', RegisterController::class, 'store', ['guest']);
