@@ -39,4 +39,9 @@ class Receipt
     {
         return $this->date->format("d/m/Y H:i:s");
     }
+
+    public function getPath(): string
+    {
+        return $this->date->format("/Y/m/");
+    }
 }

@@ -34,7 +34,14 @@ class HomeController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return new Response(200, body: $this->render('home'));
+        $user = $_SESSION['receipt']['user']['value'];
+
+        $receipts = $this->repository->getAll($user['id']);
+
+        return new Response(200, body: $this->render('home', [
+            "name" => $user['name'],
+            "receipts" => $receipts,
+        ]));
     }
 
     /**
@@ -77,7 +84,7 @@ class HomeController implements RequestHandlerInterface
         }
 
         $safeFileName = uniqid('upload_', true) . '_' . pathinfo($image->getClientFilename(), PATHINFO_BASENAME);
-        $image->moveTo(__DIR__ . '/../../storage/' . $safeFileName);
+        $image->moveTo(__DIR__ . '/../../public/storage/' . $safeFileName);
         $receipt = new Receipt($idUser, $title, $safeFileName, $date);
         $validationCreated = $this->repository->save($receipt);
 

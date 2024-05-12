@@ -13,7 +13,7 @@
 
     <section>
         <div class="container mb-5">
-            <h1 class="title">Olá <span class="text-primary">Carlos</span></h1>
+            <h1 class="title">Olá <span class="text-primary">{{ name }}</span></h1>
         </div>
     </section>
 
@@ -21,18 +21,11 @@
         <div class="container">
             <h1 class="title">Meus comprovantes</h1>
             <div class="row mt-3">
+                {% for receipt in receipts %}
                 <div class="col-md-3">
-                    {{ card.render() }}
+                    {{ card.render(receipt.id, receipt.title, receipt.image, receipt.getPath()) }}
                 </div>
-                <div class="col-md-3">
-                    {{ card.render() }}
-                </div>
-                <div class="col-md-3">
-                    {{ card.render() }}
-                </div>
-                <div class="col-md-3">
-                    {{ card.render() }}
-                </div>
+                {% endfor %}
             </div>
         </div>
     </main>
