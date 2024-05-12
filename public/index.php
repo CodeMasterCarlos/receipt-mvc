@@ -4,6 +4,7 @@ use Codemastercarlos\Receipt\Bootstrap\Bootstrap;
 use Psr\Container\ContainerInterface;
 
 $_SESSION ?? session_start();
+session_regenerate_id();
 
 date_default_timezone_set("America/Sao_Paulo");
 

@@ -12,6 +12,8 @@ Route::get('/', HomeController::class, middlewares: ['web']);
 Route::get('/receipt/create', HomeController::class, 'create', ['web']);
 Route::get('/search', SearchController::class, middlewares: ['web']);
 Route::get('/user', UserController::class, middlewares: ['web']);
+Route::post('/user', UserController::class, 'store', ['web']);
+Route::post('/user/logout', UserController::class, 'destroy', ['web']);
 
 Route::get('/login', LoginController::class, middlewares: ['guest']);
 Route::post('/login', LoginController::class, 'store', ['guest']);

@@ -3,12 +3,12 @@
 namespace Codemastercarlos\Receipt\Controller;
 
 use Codemastercarlos\Receipt\Bootstrap\FlasherMessage;
+use Codemastercarlos\Receipt\Bootstrap\SessionAuth;
 use Codemastercarlos\Receipt\Bootstrap\View;
 use Codemastercarlos\Receipt\Entity\User;
 use Codemastercarlos\Receipt\Helper\Validation;
 use Codemastercarlos\Receipt\Repository\UserRepository;
 use Exception;
-use Firebase\JWT\JWT;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,7 +19,7 @@ use Twig\Error\SyntaxError;
 
 class LoginController implements RequestHandlerInterface
 {
-    use View, FlasherMessage;
+    use View, FlasherMessage, SessionAuth;
 
     public function __construct(private readonly UserRepository $repository)
     {
@@ -88,19 +88,5 @@ class LoginController implements RequestHandlerInterface
         $password = $params["password"];
 
         return [$email, $password, $validation];
-    }
-
-    private function createSession(User $user): void
-    {
-        $privateKey = file_get_contents($_ENV['JWT_KEY_PRIVATE']);
-
-        $payload = [
-            "id" => $user->id,
-            "name" => $user->name,
-            "email" => $user->email,
-        ];
-        $jwt = JWT::encode($payload, $privateKey, $_ENV['JWT_ALGORITHM']);
-
-        $_SESSION['receipt']['user']['authorization'] = $jwt;
     }
 }

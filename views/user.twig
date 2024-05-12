@@ -9,20 +9,23 @@
     <main>
         <div class="container">
             <h1 class="title">Minha conta</h1>
-            <form>
+            <form action="/user" method="post">
                 <div class="mb-3">
                     <label for="name" class="form-label">Nome:</label>
-                    <input type="text" class="form-control" id="name" value="Carlos">
+                    <input type="text" class="form-control" id="name" name="name" value="{{ name }}">
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email:</label>
-                    <input type="email" class="form-control" id="email" value="carlos@example.com">
+                    <input type="email" class="form-control" id="email" name="email" value="{{ email }}">
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Senha:</label>
-                    <input type="password" class="form-control" id="password">
+                    <label for="password" class="form-label">Nova senha:</label>
+                    <input type="password" class="form-control" id="password" name="password">
                 </div>
                 <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+            <form action="/user/logout" method="post">
+                <button class="btn btn-secondary d-block w-50 mx-auto py-3 mt-5">Sair da conta</button>
             </form>
         </div>
     </main>
