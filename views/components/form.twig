@@ -1,4 +1,4 @@
-{% macro render(title, date) %}
+{% macro render(title, date, requiredImage = true) %}
     <div class="mb-3">
         <label for="title" class="form-label">Título</label>
         <input type="text" class="form-control" id="title" name="title" value="{{ title }}" required>
@@ -9,6 +9,6 @@
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Imagem do comprovante</label>
-        <input class="form-control" type="file" id="image">
+        <input class="form-control" type="file" id="image" name="image" {{ requiredImage ? "required" : "" }} accept="image/*">
     </div>
 {% endmacro %}

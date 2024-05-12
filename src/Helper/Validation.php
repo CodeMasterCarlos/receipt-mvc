@@ -26,20 +26,10 @@ class Validation
         }
 
         if ($this->error === false && $attr === false) {
-            $this->messageError($messageError);
-            $this->error = true;
+            $this->setError($messageError);
         }
 
         return $attr;
-    }
-
-    private function messageError($messageError): void
-    {
-        $status = $messageError['status'] ?? "error";
-        $message = $messageError['message'];
-        $time = $messageError['time'] ?? 5000;
-
-        $this->flasherCreate($status, $message, $time);
     }
 
     public function validationWasError(): bool
@@ -50,5 +40,20 @@ class Validation
 
         unset($_SESSION['receipt']['validation']['params']);
         return false;
+    }
+
+    public function setError(array $message): void
+    {
+        $this->messageError($message);
+        $this->error = true;
+    }
+
+    private function messageError($messageError): void
+    {
+        $status = $messageError['status'] ?? "error";
+        $message = $messageError['message'];
+        $time = $messageError['time'] ?? 5000;
+
+        $this->flasherCreate($status, $message, $time);
     }
 }
