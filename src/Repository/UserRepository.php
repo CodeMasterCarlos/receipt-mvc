@@ -31,16 +31,7 @@ class UserRepository
         return $stmt->fetch();
     }
 
-    public function save(User $user): bool
-    {
-        if ($user->id) {
-            return $this->update($user);
-        }
-
-        return $this->create($user);
-    }
-
-    private function create(User $user): bool
+    public function create(User $user): bool
     {
         $sql = 'INSERT INTO user(name, email, password, date_created) VALUES (:name, :email, :password, :date_created);';
         $stmt = $this->pdo->prepare($sql);
@@ -51,7 +42,7 @@ class UserRepository
         return $stmt->execute();
     }
 
-    private function update(User $user): bool
+    public function update(User $user): bool
     {
         $sql = <<<SQL
             UPDATE user

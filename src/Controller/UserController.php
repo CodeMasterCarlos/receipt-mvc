@@ -69,7 +69,7 @@ class UserController implements RequestHandlerInterface
         $user = new User($name, $email, $hashPassword, new \DateTimeImmutable($userData['date_created']));
         $user->setId($userData['id']);
 
-        $validationCreatedUser = $this->repository->save($user);
+        $validationCreatedUser = $this->repository->update($user);
 
         if ($validationCreatedUser === false) {
             $this->flasherCreate(

@@ -55,7 +55,7 @@ class RegisterController implements RequestHandlerInterface
 
         $user = new User($name, $email, $hashPassword, new \DateTimeImmutable());
 
-        $validationCreatedUser = $this->repository->save($user);
+        $validationCreatedUser = $this->repository->create($user);
 
         if ($validationCreatedUser === false) {
             $this->flasherCreate(
