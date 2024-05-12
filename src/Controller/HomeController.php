@@ -86,7 +86,7 @@ class HomeController implements RequestHandlerInterface
         $safeFileName = uniqid('upload_', true) . '_' . pathinfo($image->getClientFilename(), PATHINFO_BASENAME);
         $image->moveTo(__DIR__ . '/../../public/storage/' . $safeFileName);
         $receipt = new Receipt($idUser, $title, $safeFileName, $date);
-        $validationCreated = $this->repository->save($receipt);
+        $validationCreated = $this->repository->create($receipt);
 
         if ($validationCreated) {
             $this->flasherCreate("success", "O comprovante foi criado com sucesso!");
@@ -133,5 +133,28 @@ class HomeController implements RequestHandlerInterface
         }
 
         return [$title, $date, $image, $validation];
+    }
+
+    public function destroy(ServerRequestInterface $request): ResponseInterface
+    {
+        $params = $request->getParsedBody();
+        $idUser = $_SESSION['receipt']['user']['value']['id'];
+
+        $id = filter_var($params['id'], FILTER_VALIDATE_INT);
+
+        if ($id === false) {
+            $this->flasherCreate("error", "Informe um comprovante válido.");
+            return new Response(303, ['Location' => '/']);
+        }
+
+        $validationDestroy = $this->repository->destroy($idUser, $id);
+
+        if ($validationDestroy) {
+            $this->flasherCreate("success", "Comprovante removido com sucesso!");
+        } else {
+            $this->flasherCreate("success", "Não foi possível remover o comprovante.");
+        }
+
+        return new Response(302, ["Location" => "/"]);
     }
 }

@@ -40,12 +40,7 @@ class ReceiptRepository
         return $receipt;
     }
 
-    public function save(Receipt $receipt): bool
-    {
-        return $this->create($receipt);
-    }
-
-    private function create(Receipt $receipt): bool
+    public function create(Receipt $receipt): bool
     {
         $sql = "INSERT INTO receipt(title, image, id_user, date) VALUES(:title, :image, :id_user, :date);";
         $stmt = $this->pdo->prepare($sql);
@@ -53,6 +48,15 @@ class ReceiptRepository
         $stmt->bindValue(":image", $receipt->image);
         $stmt->bindValue(":id_user", $receipt->idUser, PDO::PARAM_INT);
         $stmt->bindValue(":date", $receipt->formartDateEUA());
+        return $stmt->execute();
+    }
+
+    public function destroy(string|int $idUser, string|int $idReceipt): bool
+    {
+        $sql = "DELETE FROM receipt WHERE id_user = :id_user AND id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":id_user", $idUser, PDO::PARAM_INT);
+        $stmt->bindValue(":id", $idReceipt, PDO::PARAM_INT);
         return $stmt->execute();
     }
 }

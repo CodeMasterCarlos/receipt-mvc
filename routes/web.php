@@ -11,6 +11,7 @@ use Codemastercarlos\Receipt\Controller\UserController;
 Route::get('/', HomeController::class, middlewares: ['web']);
 Route::get('/receipt/create', HomeController::class, 'create', ['web']);
 Route::post('/receipt/create', HomeController::class, 'store', ['web']);
+Route::post('/receipt/remove', HomeController::class, 'destroy', ['web']);
 Route::get('/search', SearchController::class, middlewares: ['web']);
 Route::get('/user', UserController::class, middlewares: ['web']);
 Route::post('/user', UserController::class, 'store', ['web']);
