@@ -13,6 +13,22 @@ class ReceiptRepository
     {
     }
 
+    /**
+     * @throws Exception
+     */
+    public function find(string|int $id, string|int $idUser): Receipt|bool
+    {
+        $sql = "SELECT * FROM receipt WHERE id_user = :id_user AND id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":id_user", $idUser, PDO::PARAM_INT);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $receipt = $stmt->fetch();
+
+        return $this->hydrateReceipt($receipt);
+    }
+
     public function getAll(string|int $id, $offset = 0, $limit = 100): array
     {
         $sql = "SELECT * FROM receipt WHERE id_user = :id LIMIT :offset, :limit";
@@ -33,8 +49,12 @@ class ReceiptRepository
     /**
      * @throws Exception
      */
-    private function hydrateReceipt(array $receiptData): Receipt
+    private function hydrateReceipt(array|bool $receiptData): Receipt|bool
     {
+        if (!$receiptData) {
+            return false;
+        }
+
         $receipt = new Receipt($receiptData['id_user'], $receiptData['title'], $receiptData['image'], new DateTimeImmutable($receiptData['date']));
         $receipt->setId($receiptData['id']);
         return $receipt;
@@ -57,6 +77,18 @@ class ReceiptRepository
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(":id_user", $idUser, PDO::PARAM_INT);
         $stmt->bindValue(":id", $idReceipt, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function update(Receipt $receipt): bool
+    {
+        $sql = "UPDATE receipt SET title = :title, image = :image, id_user = :id_user, date = :date WHERE id = :id;";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":title", $receipt->title);
+        $stmt->bindValue(":image", $receipt->image);
+        $stmt->bindValue(":id_user", $receipt->idUser, PDO::PARAM_INT);
+        $stmt->bindValue(":id", $receipt->id, PDO::PARAM_INT);
+        $stmt->bindValue(":date", $receipt->formartDateEUA());
         return $stmt->execute();
     }
 }

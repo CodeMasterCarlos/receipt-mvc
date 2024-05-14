@@ -10,8 +10,9 @@
     <main>
         <div class="container">
             <h1 class="title">Editar comprovante</h1>
-            <form action="/receipt/edit?id=" method="post" enctype="multipart/form-data">
-                {{ form.render('Título', '2024-05-05') }}
+            <form action="/receipt/edit" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="{{ receipt.id }}">
+                {{ form.render(receipt.title, receipt.formartDateEUA(), false) }}
                 <button type="submit" class="btn btn-primary">Salvar</button>
             </form>
         </div>

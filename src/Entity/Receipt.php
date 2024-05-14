@@ -32,12 +32,12 @@ class Receipt
 
     public function formartDateEUA(): string
     {
-        return $this->date->format("Y-m-d H:i:s");
+        return $this->date->format("Y-m-d");
     }
 
     public function formartDateBR(): string
     {
-        return $this->date->format("d/m/Y H:i:s");
+        return $this->date->format("d/m/Y");
     }
 
     public function getPath(): string
