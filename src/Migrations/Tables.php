@@ -15,6 +15,7 @@ class Tables
     {
         $this->createTableUser();
         $this->createTableReceipt();
+        $this->createIndex();
     }
 
     private function createTableUser(): void
@@ -41,5 +42,17 @@ class Tables
             FOREIGN KEY (id_user) REFERENCES user(id)
         )";
         $this->pdo->query($sql);
+    }
+
+    private function createIndex(): void
+    {
+        $sqlSelect = "SELECT COUNT(1) IndexIsThere FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema=DATABASE() AND table_name='receipt' AND index_name='search';";
+        $stmtSelect = $this->pdo->query($sqlSelect);
+        $indexExists = $stmtSelect->fetch()['IndexIsThere'];
+
+        if (!$indexExists) {
+            $sql = "CREATE FULLTEXT INDEX search ON receipt(title)";
+            $this->pdo->query($sql);
+        }
     }
 }

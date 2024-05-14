@@ -91,4 +91,13 @@ class ReceiptRepository
         $stmt->bindValue(":date", $receipt->formartDateEUA());
         return $stmt->execute();
     }
+
+    public function searchFor(mixed $search): array
+    {
+        $sql = "SELECT * FROM receipt WHERE MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(1, $search);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }

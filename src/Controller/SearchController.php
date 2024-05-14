@@ -3,6 +3,7 @@
 namespace Codemastercarlos\Receipt\Controller;
 
 use Codemastercarlos\Receipt\Bootstrap\View;
+use Codemastercarlos\Receipt\Repository\ReceiptRepository;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,6 +16,10 @@ class SearchController implements RequestHandlerInterface
 {
     use View;
 
+    public function __construct(private readonly ReceiptRepository $repository)
+    {
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
@@ -22,6 +27,16 @@ class SearchController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return new Response(200, body: $this->render('search'));
+        $params = $request->getQueryParams();
+
+        $search = filter_var($params['search'], FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => "/^.{1}/"]]);
+
+        $receipts = $this->repository->searchFor($search);
+
+        return new Response(200, body: $this->render('search', [
+            "search" => $search,
+            "receipts" => $receipts,
+        ]));
     }
+
 }
