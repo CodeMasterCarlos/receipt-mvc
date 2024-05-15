@@ -29,23 +29,6 @@ class ReceiptRepository
         return $this->hydrateReceipt($receipt);
     }
 
-    public function getAll(string|int $id, $offset = 0, $limit = 100): array
-    {
-        $sql = "SELECT * FROM receipt WHERE id_user = :id LIMIT :offset, :limit";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
-        $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
-        $stmt->bindValue(":limit", $limit, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $receiptList = $stmt->fetchAll();
-
-        return array_map(
-            $this->hydrateReceipt(...),
-            $receiptList
-        );
-    }
-
     /**
      * @throws Exception
      */
@@ -58,6 +41,20 @@ class ReceiptRepository
         $receipt = new Receipt($receiptData['id_user'], $receiptData['title'], $receiptData['image'], new DateTimeImmutable($receiptData['date']));
         $receipt->setId($receiptData['id']);
         return $receipt;
+    }
+
+    public function getAll(string|int $id, $offset = 0, $limit = 100): array
+    {
+        $sql = "SELECT * FROM receipt WHERE id_user = :id LIMIT :offset, :limit";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+        $stmt->bindValue(":limit", $limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $receiptList = $stmt->fetchAll();
+
+        return array_map($this->hydrateReceipt(...), $receiptList);
     }
 
     public function create(Receipt $receipt): bool

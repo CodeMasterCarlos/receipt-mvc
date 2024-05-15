@@ -32,16 +32,6 @@ class Validation
         return $attr;
     }
 
-    public function validationWasError(): bool
-    {
-        if ($this->error === true) {
-            return true;
-        }
-
-        unset($_SESSION['receipt']['validation']['params']);
-        return false;
-    }
-
     public function setError(array $message): void
     {
         $this->messageError($message);
@@ -55,5 +45,15 @@ class Validation
         $time = $messageError['time'] ?? 5000;
 
         $this->flasherCreate($status, $message, $time);
+    }
+
+    public function validationWasError(): bool
+    {
+        if ($this->error === true) {
+            return true;
+        }
+
+        unset($_SESSION['receipt']['validation']['params']);
+        return false;
     }
 }

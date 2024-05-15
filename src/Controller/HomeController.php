@@ -4,12 +4,7 @@ namespace Codemastercarlos\Receipt\Controller;
 
 use Codemastercarlos\Receipt\Bootstrap\FlasherMessage;
 use Codemastercarlos\Receipt\Bootstrap\View;
-use Codemastercarlos\Receipt\Entity\Receipt;
-use Codemastercarlos\Receipt\Helper\Validation;
 use Codemastercarlos\Receipt\Repository\ReceiptRepository;
-use DateTimeImmutable;
-use Exception;
-use finfo;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -43,5 +38,4 @@ class HomeController implements RequestHandlerInterface
             "receipts" => $receipts,
         ]));
     }
-
 }

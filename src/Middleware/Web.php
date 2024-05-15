@@ -2,6 +2,7 @@
 
 namespace Codemastercarlos\Receipt\Middleware;
 
+use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Nyholm\Psr7\Response;
@@ -20,12 +21,8 @@ class Web implements MiddlewareInterface
             $jwt = $_SESSION['receipt']['user']['authorization'] ?? "";
 
             $decoded = JWT::decode($jwt, new Key($publicKey, 'RS256'));
-            $_SESSION['receipt']['user']['value'] = [
-                "id" => $decoded->id,
-                "name" => $decoded->name,
-                "email" => $decoded->email,
-            ];
-        } catch (\Exception) {
+            $_SESSION['receipt']['user']['value'] = ["id" => $decoded->id, "name" => $decoded->name, "email" => $decoded->email,];
+        } catch (Exception) {
             return new Response(302, ["Location" => "/login"]);
         }
 

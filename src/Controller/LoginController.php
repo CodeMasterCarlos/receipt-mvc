@@ -8,6 +8,7 @@ use Codemastercarlos\Receipt\Bootstrap\View;
 use Codemastercarlos\Receipt\Entity\User;
 use Codemastercarlos\Receipt\Helper\Validation;
 use Codemastercarlos\Receipt\Repository\UserRepository;
+use DateTimeImmutable;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -54,20 +55,11 @@ class LoginController implements RequestHandlerInterface
         $passwordUser = $userData['password'] ?? "";
 
         if (password_verify($password, $passwordUser) === false) {
-            $this->flasherCreate(
-                "error",
-                "Desculpe, não foi possível fazer login. Por favor, verifique suas credenciais e tente novamente.",
-                8000
-            );
+            $this->flasherCreate("error", "Desculpe, não foi possível fazer login. Por favor, verifique suas credenciais e tente novamente.", 8000);
             return new Response(303, ["Location" => "/login?email=" . $email]);
         }
 
-        $user = new User(
-            $userData['name'],
-            $userData['email'],
-            $userData['password'],
-            new \DateTimeImmutable($userData['date_created'])
-        );
+        $user = new User($userData['name'], $userData['email'], $userData['password'], new DateTimeImmutable($userData['date_created']));
         $user->setId($userData['id']);
 
         $this->createSession($user);
@@ -79,11 +71,7 @@ class LoginController implements RequestHandlerInterface
     {
         $validation = new Validation($params);
 
-        $email = $validation->validate(
-            "email",
-            FILTER_VALIDATE_EMAIL,
-            messageError: ['message' => "Por favor, insira um e-mail válido."]
-        );
+        $email = $validation->validate("email", FILTER_VALIDATE_EMAIL, messageError: ['message' => "Por favor, insira um e-mail válido."]);
 
         $password = $params["password"];
 

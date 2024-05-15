@@ -89,12 +89,6 @@ class UserController implements RequestHandlerInterface
         return new Response(302, ['Location' => $location]);
     }
 
-    public function destroy(ServerRequestInterface $request): ResponseInterface
-    {
-        unset($_SESSION['receipt']['user']);
-        return new Response(302, ['Location' => '/login']);
-    }
-
     private function validateParams($params): array
     {
         $validation = new Validation($params);
@@ -130,5 +124,11 @@ class UserController implements RequestHandlerInterface
     {
         $user = $this->repository->getFromEmail($email);
         return $user !== false;
+    }
+
+    public function destroy(): ResponseInterface
+    {
+        unset($_SESSION['receipt']['user']);
+        return new Response(302, ['Location' => '/login']);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Codemastercarlos\Receipt\Middleware;
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

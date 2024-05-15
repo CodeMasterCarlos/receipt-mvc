@@ -24,7 +24,6 @@ class Receipt
         $this->date = $date;
     }
 
-
     public function setId(string $id): void
     {
         $this->id = $id;
@@ -33,11 +32,6 @@ class Receipt
     public function formartDateEUA(): string
     {
         return $this->date->format("Y-m-d");
-    }
-
-    public function formartDateBR(): string
-    {
-        return $this->date->format("d/m/Y");
     }
 
     public function getPath(): string

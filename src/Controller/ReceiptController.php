@@ -38,10 +38,7 @@ class ReceiptController implements RequestHandlerInterface
 
         $receipts = $this->repository->getAll($user['id']);
 
-        return new Response(200, body: $this->render('create', [
-            "name" => $user['name'],
-            "receipts" => $receipts,
-        ]));
+        return new Response(200, body: $this->render('create', ["name" => $user['name'], "receipts" => $receipts,]));
     }
 
     /**
@@ -80,47 +77,6 @@ class ReceiptController implements RequestHandlerInterface
         }
 
         return new Response(302, ['Location' => $location]);
-    }
-
-    /**
-     * @param array $params
-     * @param UploadedFileInterface $fileImage
-     * @param bool $imageIsRequired
-     * @return array
-     * @throws Exception
-     */
-    private function validateParams(array $params, UploadedFileInterface $fileImage, bool $imageIsRequired = true): array
-    {
-        $validation = new Validation($params);
-
-        $title = $validation->validate(
-            'title',
-            FILTER_VALIDATE_REGEXP,
-            ["options" => ["regexp" => "/^.{3}?.*/"]],
-            ["message" => "O título deve ter pelo menos 3 caracteres."]
-        );
-
-        $date = $params['date'];
-
-        $dateString = empty($date) === false ? $validation->validate(
-            'date',
-            FILTER_VALIDATE_REGEXP,
-            ["options" => ["regexp" => "/^\d{4}-\d{2}-\d{2}/"]],
-            ["message" => "Data inválida. Por favor, tente novamente."]
-        ) : "";
-
-        $date = new DateTimeImmutable($dateString);
-
-        if ($fileImage->getError() === UPLOAD_ERR_OK) {
-            $image = $fileImage;
-        } else {
-            $image = false;
-            if ($imageIsRequired) {
-                $validation->setError(["message" => "Por favor, envie uma imagem válida."]);
-            }
-        }
-
-        return [$title, $date, $image, $validation];
     }
 
     /**
@@ -180,9 +136,7 @@ class ReceiptController implements RequestHandlerInterface
             return new Response(302, ['Location' => "/"]);
         }
 
-        return new Response(200, body: $this->render('edit', [
-            "receipt" => $receipt,
-        ]));
+        return new Response(200, body: $this->render('edit', ["receipt" => $receipt,]));
     }
 
     /**
@@ -242,15 +196,35 @@ class ReceiptController implements RequestHandlerInterface
         return new Response(302, ['Location' => $location]);
     }
 
-    private function validateId($params): int|bool
+    /**
+     * @param array $params
+     * @param UploadedFileInterface $fileImage
+     * @param bool $imageIsRequired
+     * @return array
+     * @throws Exception
+     */
+    private function validateParams(array $params, UploadedFileInterface $fileImage, bool $imageIsRequired = true): array
     {
-        $id = filter_var($params['id'], FILTER_VALIDATE_INT);
+        $validation = new Validation($params);
 
-        if ($id === false) {
-            $this->flasherCreate("error", "Informe um comprovante válido.");
+        $title = $validation->validate('title', FILTER_VALIDATE_REGEXP, ["options" => ["regexp" => "/^.{3}?.*/"]], ["message" => "O título deve ter pelo menos 3 caracteres."]);
+
+        $date = $params['date'];
+
+        $dateString = empty($date) === false ? $validation->validate('date', FILTER_VALIDATE_REGEXP, ["options" => ["regexp" => "/^\d{4}-\d{2}-\d{2}/"]], ["message" => "Data inválida. Por favor, tente novamente."]) : "";
+
+        $date = new DateTimeImmutable($dateString);
+
+        if ($fileImage->getError() === UPLOAD_ERR_OK) {
+            $image = $fileImage;
+        } else {
+            $image = false;
+            if ($imageIsRequired) {
+                $validation->setError(["message" => "Por favor, envie uma imagem válida."]);
+            }
         }
 
-        return $id;
+        return [$title, $date, $image, $validation];
     }
 
     /**
@@ -276,5 +250,16 @@ class ReceiptController implements RequestHandlerInterface
     private function deleteImage(string $imageName): bool
     {
         return unlink(__DIR__ . '/../../public/storage/' . $imageName);
+    }
+
+    private function validateId($params): int|bool
+    {
+        $id = filter_var($params['id'], FILTER_VALIDATE_INT);
+
+        if ($id === false) {
+            $this->flasherCreate("error", "Informe um comprovante válido.");
+        }
+
+        return $id;
     }
 }

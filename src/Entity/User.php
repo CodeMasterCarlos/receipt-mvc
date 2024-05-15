@@ -33,9 +33,4 @@ class User
     {
         return $this->dateCreated->format("Y-m-d H:i:s");
     }
-
-    public function formartDateBR(): string
-    {
-        return $this->dateCreated->format("d/m/Y H:i:s");
-    }
 }
