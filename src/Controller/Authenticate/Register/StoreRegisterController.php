@@ -1,6 +1,6 @@
 <?php
 
-namespace Codemastercarlos\Receipt\Controller;
+namespace Codemastercarlos\Receipt\Controller\Authenticate\Register;
 
 use Codemastercarlos\Receipt\Bootstrap\FlasherMessage;
 use Codemastercarlos\Receipt\Bootstrap\View;
@@ -12,11 +12,8 @@ use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
-class RegisterController implements RequestHandlerInterface
+class StoreRegisterController implements RequestHandlerInterface
 {
     use View, FlasherMessage;
 
@@ -24,17 +21,7 @@ class RegisterController implements RequestHandlerInterface
     {
     }
 
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
-    {
-        return new Response(200, body: $this->render('register'));
-    }
-
-    public function store(ServerRequestInterface $request): ResponseInterface
     {
         $bodyParams = $request->getParsedBody();
         $location = "/register";

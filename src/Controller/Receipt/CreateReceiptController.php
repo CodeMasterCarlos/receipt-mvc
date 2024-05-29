@@ -1,6 +1,6 @@
 <?php
 
-namespace Codemastercarlos\Receipt\Controller;
+namespace Codemastercarlos\Receipt\Controller\Receipt;
 
 use Codemastercarlos\Receipt\Bootstrap\View;
 use Codemastercarlos\Receipt\Repository\ReceiptRepository;
@@ -12,7 +12,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class SearchController implements RequestHandlerInterface
+class CreateReceiptController implements RequestHandlerInterface
 {
     use View;
 
@@ -21,21 +21,16 @@ class SearchController implements RequestHandlerInterface
     }
 
     /**
-     * @throws SyntaxError
      * @throws RuntimeError
+     * @throws SyntaxError
      * @throws LoaderError
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $params = $request->getQueryParams();
+        $user = $_SESSION['receipt']['user']['value'];
 
-        $search = filter_var($params['search'], FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => "/^.{1}/"]]);
+        $receipts = $this->repository->getAll($user['id']);
 
-        $receipts = $this->repository->searchFor($search);
-
-        return new Response(200, body: $this->render('search', [
-            "search" => $search,
-            "receipts" => $receipts,
-        ]));
+        return new Response(200, body: $this->render('create', ["name" => $user['name'], "receipts" => $receipts]));
     }
 }

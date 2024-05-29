@@ -1,22 +1,20 @@
 <?php
 
-namespace Codemastercarlos\Receipt\Controller;
+namespace Codemastercarlos\Receipt\Controller\Receipt;
 
-use Codemastercarlos\Receipt\Bootstrap\FlasherMessage;
 use Codemastercarlos\Receipt\Bootstrap\View;
 use Codemastercarlos\Receipt\Repository\ReceiptRepository;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class HomeController implements RequestHandlerInterface
+class ReceiptController implements RequestHandlerInterface
 {
-    use View, FlasherMessage;
+    use View;
 
     public function __construct(private readonly ReceiptRepository $repository)
     {

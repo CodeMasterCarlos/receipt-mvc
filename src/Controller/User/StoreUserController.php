@@ -1,6 +1,6 @@
 <?php
 
-namespace Codemastercarlos\Receipt\Controller;
+namespace Codemastercarlos\Receipt\Controller\User;
 
 use Codemastercarlos\Receipt\Bootstrap\FlasherMessage;
 use Codemastercarlos\Receipt\Bootstrap\SessionAuth;
@@ -8,16 +8,14 @@ use Codemastercarlos\Receipt\Bootstrap\View;
 use Codemastercarlos\Receipt\Entity\User;
 use Codemastercarlos\Receipt\Helper\Validation;
 use Codemastercarlos\Receipt\Repository\UserRepository;
+use DateTimeImmutable;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
-class UserController implements RequestHandlerInterface
+class StoreUserController implements RequestHandlerInterface
 {
     use View, FlasherMessage, SessionAuth;
 
@@ -26,24 +24,9 @@ class UserController implements RequestHandlerInterface
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
-    public function handle(ServerRequestInterface $request): ResponseInterface
-    {
-        $userData = $_SESSION['receipt']['user']['value'];
-
-        return new Response(200, body: $this->render('user', [
-            "name" => $userData['name'],
-            "email" => $userData['email'],
-        ]));
-    }
-
-    /**
      * @throws Exception
      */
-    public function store(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $bodyParams = $request->getParsedBody();
         $userAuthSession = $_SESSION['receipt']['user']['value'];
@@ -66,7 +49,7 @@ class UserController implements RequestHandlerInterface
         }
 
         $hashPassword = empty($password) ? $userData['password'] : password_hash($password, PASSWORD_ARGON2ID);
-        $user = new User($name, $email, $hashPassword, new \DateTimeImmutable($userData['date_created']));
+        $user = new User($name, $email, $hashPassword, new DateTimeImmutable($userData['date_created']));
         $user->setId($userData['id']);
 
         $validationCreatedUser = $this->repository->update($user);
@@ -124,11 +107,5 @@ class UserController implements RequestHandlerInterface
     {
         $user = $this->repository->getFromEmail($email);
         return $user !== false;
-    }
-
-    public function destroy(): ResponseInterface
-    {
-        unset($_SESSION['receipt']['user']);
-        return new Response(302, ['Location' => '/login']);
     }
 }
