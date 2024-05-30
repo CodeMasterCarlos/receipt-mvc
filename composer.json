@@ -4,13 +4,14 @@
     "type": "library",
     "autoload": {
         "psr-4": {
-            "Codemastercarlos\\Receipt\\": "src/"
+            "Codemastercarlos\\Receipt\\": "src/",
+            "Codemastercarlos\\Receipt\\Tests\\": "tests/"
         }
     },
     "authors": [
         {
             "name": "Carlos Alexandre",
-            "email": "carlos24106k@gmail.com"
+            "email": "codemastercarlos@outlok.com"
         }
     ],
     "require": {
@@ -27,5 +28,8 @@
         "monolog/monolog": "^3.6",
         "firebase/php-jwt": "^6.10",
         "ext-fileinfo": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.1"
     }
 }

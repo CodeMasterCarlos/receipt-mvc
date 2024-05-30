@@ -1,5 +1,13 @@
 /vendor/
+/node_modules/
 /.idea/
-.env
+
+.phpunit.cache/
+.phpunit.result.cache
+phpunit.xml.bak
+
 /logs/
+/*.log
+
 /public/storage/upload_*
+.env

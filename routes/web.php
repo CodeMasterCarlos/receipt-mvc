@@ -1,6 +1,6 @@
 <?php
 
-use Codemastercarlos\Receipt\Bootstrap\Route;
+use Codemastercarlos\Receipt\Bootstrap\Route\Route;
 use Codemastercarlos\Receipt\Controller\Authenticate\Login\LoginController;
 use Codemastercarlos\Receipt\Controller\Authenticate\Login\StoreLoginController;
 use Codemastercarlos\Receipt\Controller\Authenticate\Register\RegisterController;

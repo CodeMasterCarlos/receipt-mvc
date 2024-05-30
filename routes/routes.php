@@ -1,9 +1,10 @@
 <?php
 
-use Codemastercarlos\Receipt\Bootstrap\Route;
+use Codemastercarlos\Receipt\Bootstrap\Route\Route;
+use Codemastercarlos\Receipt\Bootstrap\Route\RouteFile;
 
-Route::run([
-    "web.php",
-]);
+Route::requiredFileRoutes(
+    new RouteFile('web.php'),
+);
 
-return Route::getRoutes();
+return Route::allRoutes();

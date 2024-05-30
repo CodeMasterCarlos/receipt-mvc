@@ -1,6 +1,9 @@
 <?php
 
+use Codemastercarlos\Receipt\Middleware\Guest;
+use Codemastercarlos\Receipt\Middleware\Web;
+
 return [
-    'web' => \Codemastercarlos\Receipt\Middleware\Web::class,
-    'guest' => \Codemastercarlos\Receipt\Middleware\Guest::class,
+    'web' => Web::class,
+    'guest' => Guest::class,
 ];

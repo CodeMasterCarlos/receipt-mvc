@@ -27,7 +27,7 @@ class Bootstrap
 
     private RequestHandlerInterface $controller;
 
-    private string $action;
+    private string $action = 'handle';
 
     private MiddlewareCollection $middlewares;
 
@@ -50,7 +50,6 @@ class Bootstrap
 
         $message = $_ENV['APP'] === "production" ? "" : $e->getMessage();
         $this->controller = new ErrorController($message);
-        $this->action = "handle";
         $this->middlewares = new MiddlewareCollection([]);
         $this->response();
     }
@@ -83,10 +82,10 @@ class Bootstrap
     {
         $route = $this->routes[$this->httpMethod][$this->path];
         if (isset($route)) {
-            $this->createController($route['controller'], $route['action']);
+            $this->createController($route['controller']);
             $listMiddlewares = $route['middlewares'];
         } else {
-            $this->createController(NotFoundController::class, 'handle');
+            $this->createController(NotFoundController::class);
             $listMiddlewares = [];
         }
 
@@ -97,12 +96,10 @@ class Bootstrap
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    private function createController($controllerName, $action): void
+    private function createController($controllerName): void
     {
         /** @var RequestHandlerInterface $controller */
         $controller = $this->diContainer->get($controllerName);
-
-        $this->action = $action;
 
         if (is_subclass_of($controller, RequestHandlerInterface::class) === false) {
             throw new LogicException("O controller $controllerName deve implementar a interface RequestHandlerInterface");
