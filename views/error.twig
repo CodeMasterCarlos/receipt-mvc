@@ -14,16 +14,39 @@
             <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
                 <i class="fa-solid fa-bug fa-5x mb-2"></i>
                 <h1 class="text-body-emphasis">Ops! Algo deu errado em nosso servidor</h1>
-                <p class="col-lg-6 mx-auto mb-4">
-                    {% if message|length > 0 %}
-                        {{ message }}
-                    {% else %}
+                {% if status %}
+                    <p class="col-lg-6 mx-auto mb-4">
+                        <span class="code">{{ message }}</span>
+                    </p>
+                    <p class="col-lg-6 mx-auto mb-4">
+                        Código: <span class="code">{{ code }}</span>
+                    </p>
+                    <p class="col-lg-6 mx-auto mb-4">
+                        Arquivo: <span class="code">{{ file }}</span> na Linha: <span class="code">{{ line }}</span>
+                    </p>
+                    <h2>Trace</h2>
+                    <ul class="col-12 mx-auto mb-4 d-flex justify-content-center align-items-center flex-column">
+                        {% for lineTrace in trace %}
+                            <li>
+                                Arquivo <span class="code">{{ lineTrace.file }}</span> na Linha <span class="code">{{ lineTrace.line }}</span>
+                                Em <span class="code">{{ lineTrace.class }} {{ lineTrace.function }}</span>
+                                Com os <span class="code">Argumentos:</span>
+                                <ul class="list-unstyled">
+                                    {% for value in lineTrace.args %}
+                                        <li>{{ value }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="col-lg-6 mx-auto mb-4">
                         Infelizmente, encontramos um erro interno ao processar sua solicitação. Mas não se preocupe, você pode retornar à página inicial com apenas um clique.
-                    {% endif %}
-                </p>
-                <a class="btn btn-primary px-5 mb-5" href="/">
-                    Voltar para home
-                </a>
+                    </p>
+                    <a class="btn btn-primary px-5 mb-5" href="/">
+                        Voltar para home
+                    </a>
+                {% endif %}
             </div>
         </div>
     </main>

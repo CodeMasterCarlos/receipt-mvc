@@ -6,3 +6,8 @@
     width: 100vw;
     height: calc(100vh - 100px);
 }
+
+.code {
+    color: #f10202;
+    font-weight: 500;
+}
