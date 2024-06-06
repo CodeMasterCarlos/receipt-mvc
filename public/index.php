@@ -1,6 +1,9 @@
 <?php
 
+global $middlewares;
+
 use Codemastercarlos\Receipt\Bootstrap\Bootstrap;
+use Codemastercarlos\Receipt\Bootstrap\Config\SettingsFileConfig;
 use Codemastercarlos\Receipt\Bootstrap\HttpDiContainer;
 use Codemastercarlos\Receipt\Bootstrap\HttpError;
 use Psr\Container\ContainerInterface;
@@ -18,9 +21,9 @@ $dotenv->load();
 try {
     $routes = require __DIR__ . '/../routes/routes.php';
 
-    $middlewares = require __DIR__ . '/../config/Middlewares.php';
+    SettingsFileConfig::addSettingsFilesInSuperGlobal();
 
-    $builder = require __DIR__ . '/../config/DiContainer.php';
+    $builder = require __DIR__ . '/../dependencies/DiContainer.php';
     /** @var ContainerInterface $container */
     $diContainer = $builder->build();
 
