@@ -52,7 +52,7 @@ class ValidationHelper
     /**
      * @throws InvalidValidationException
      */
-    public function validateRule(string $attribute, string|Rule $ruleName): void
+    private function validateRule(string $attribute, string|Rule $ruleName): void
     {
         $parameterValue = $this->parameters[$attribute] ?? null;
 
