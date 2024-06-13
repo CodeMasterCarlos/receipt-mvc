@@ -6,7 +6,7 @@ use Codemastercarlos\Receipt\Bootstrap\FlasherMessage;
 use Codemastercarlos\Receipt\Bootstrap\SessionAuth;
 use Codemastercarlos\Receipt\Bootstrap\View;
 use Codemastercarlos\Receipt\Entity\User;
-use Codemastercarlos\Receipt\Helper\Validation;
+use Codemastercarlos\Receipt\Helper\ValidationHelper;
 use Codemastercarlos\Receipt\Repository\UserRepository;
 use DateTimeImmutable;
 use Exception;
@@ -29,13 +29,14 @@ class StoreLoginController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $bodyParams = $request->getParsedBody();
-        $location = "/login";
-        /** @var Validation $validation */
-        [$email, $password, $validation] = $this->validateParams($bodyParams);
 
-        if ($validation->validationWasError()) {
-            return new Response(303, ["Location" => $location]);
-        }
+        $validation = new ValidationHelper($bodyParams, [
+            "email" => ["required"],
+            "password" => ["required"],
+        ]);
+
+        $email = $validation->getAttribute("email");
+        $password = $validation->getAttribute("password");
 
         $userData = $this->repository->getFromEmail($email);
 
@@ -52,16 +53,5 @@ class StoreLoginController implements RequestHandlerInterface
         $this->createSession($user);
 
         return new Response(302, ["Location" => "/"]);
-    }
-
-    private function validateParams($params): array
-    {
-        $validation = new Validation($params);
-
-        $email = $validation->validate("email", FILTER_VALIDATE_EMAIL, messageError: ['message' => "Por favor, insira um e-mail válido."]);
-
-        $password = $params["password"];
-
-        return [$email, $password, $validation];
     }
 }
