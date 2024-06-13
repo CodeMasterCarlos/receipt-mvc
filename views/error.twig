@@ -30,12 +30,6 @@
                             <li>
                                 Arquivo <span class="code">{{ lineTrace.file }}</span> na Linha <span class="code">{{ lineTrace.line }}</span>
                                 Em <span class="code">{{ lineTrace.class }} {{ lineTrace.function }}</span>
-                                Com os <span class="code">Argumentos:</span>
-                                <ul class="list-unstyled">
-                                    {% for value in lineTrace.args %}
-                                        <li>{{ value }}</li>
-                                    {% endfor %}
-                                </ul>
                             </li>
                         {% endfor %}
                     </ul>
