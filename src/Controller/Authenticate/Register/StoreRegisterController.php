@@ -9,7 +9,7 @@ use Codemastercarlos\Receipt\Exception\InvalidValidationException;
 use Codemastercarlos\Receipt\Helper\HydrateHelper;
 use Codemastercarlos\Receipt\Helper\ValidationHelper;
 use Codemastercarlos\Receipt\Repository\UserRepository;
-use Codemastercarlos\Receipt\Rules\UniqueEmailUser;
+use Codemastercarlos\Receipt\Rules\UniqueEmailUserRule;
 use DateTimeImmutable;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -34,7 +34,7 @@ class StoreRegisterController implements RequestHandlerInterface
 
         $validation = new ValidationHelper($bodyParams, [
             'name' => ['required', 'min:3', 'max:255'],
-            'email' => ['required', 'email', 'max:255', new UniqueEmailUser($this->repository)],
+            'email' => ['required', 'email', 'max:255', new UniqueEmailUserRule($this->repository)],
             'password' => ['required', 'min:8', 'max:255'],
         ]);
 

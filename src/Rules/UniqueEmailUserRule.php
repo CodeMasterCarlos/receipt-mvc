@@ -5,7 +5,7 @@ namespace Codemastercarlos\Receipt\Rules;
 use Codemastercarlos\Receipt\Interfaces\Bootstrap\Validation\Rule;
 use Codemastercarlos\Receipt\Repository\UserRepository;
 
-class UniqueEmailUser implements Rule
+class UniqueEmailUserRule implements Rule
 {
     public function __construct(private readonly UserRepository $repository)
     {

@@ -5,5 +5,7 @@ return [
     'email' => 'e-mail',
     'password' => 'senha',
     'image' => 'imagem',
-    'id' => 'identificador'
+    'id' => 'identificador',
+    'title' => 'título',
+    'date' => 'data',
 ];

@@ -4,7 +4,9 @@ namespace Codemastercarlos\Receipt\Controller\Receipt;
 
 use Codemastercarlos\Receipt\Bootstrap\FlasherMessage;
 use Codemastercarlos\Receipt\Bootstrap\View;
+use Codemastercarlos\Receipt\Helper\ValidationHelper;
 use Codemastercarlos\Receipt\Repository\ReceiptRepository;
+use Codemastercarlos\Receipt\Rules\ExistReceiptRule;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -27,19 +29,12 @@ class DeleteReceiptController implements RequestHandlerInterface
         $params = $request->getParsedBody();
         $idUser = $_SESSION['receipt']['user']['value']['id'];
 
-        $id = filter_var($params['id'], FILTER_VALIDATE_INT);
+        $validation = new ValidationHelper($params, [
+            'id' => ['required', 'int-receipt', new ExistReceiptRule($this->repository, $idUser)]
+        ]);
 
-        if ($id === false) {
-            $this->flasherCreate("error", "Informe um comprovante válido.");
-            return new Response(303, ['Location' => '/']);
-        }
-
+        $id = $validation->getAttribute('id');
         $receipt = $this->repository->find($id, $idUser);
-
-        if ($receipt === false) {
-            $this->flasherCreate("info", "Comprovante não existe.");
-            return new Response(302, ['Location' => "/"]);
-        }
 
         $validationDestroy = $this->repository->destroy($idUser, $id);
 
