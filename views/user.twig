@@ -1,5 +1,6 @@
 {% extends "layouts/main.twig" %}
 {% import 'components/header.twig' as header %}
+{% import '@components/messageError.twig' as errorForm %}
 
 {% block title %}Minha conta{% endblock %}
 
@@ -13,14 +14,17 @@
                 <div class="mb-3">
                     <label for="name" class="form-label">Nome:</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{ name }}">
+                    {{ errorForm.render('name') }}
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email:</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{ email }}">
+                    {{ errorForm.render('email') }}
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Nova senha:</label>
                     <input type="password" class="form-control" id="password" name="password">
+                    {{ errorForm.render('password') }}
                 </div>
                 <button type="submit" class="btn btn-primary">Salvar</button>
             </form>

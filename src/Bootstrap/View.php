@@ -20,6 +20,7 @@ trait View
     public function render(string $name, array $data = []): string
     {
         $loader = new FilesystemLoader(__DIR__ . '/../../views');
+        $loader->addPath(__DIR__ . '/../../views/components', 'components');
         $twig = new Environment($loader, ['debug' => true]);
         $twig->addExtension(new DebugExtension());
         $twig->addGlobal('utils', new Utils());

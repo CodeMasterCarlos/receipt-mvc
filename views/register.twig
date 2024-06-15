@@ -1,5 +1,6 @@
 {% extends "layouts/main.twig" %}
 {% import 'components/header.twig' as header %}
+{% import '@components/messageError.twig' as errorForm %}
 
 {% block head %}
     <link rel="stylesheet" href="/css/jumbotron.css">
@@ -18,14 +19,17 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Nome:</label>
                         <input type="text" class="form-control" id="name" name="name" required value="{{ params['name'] }}">
+                        {{ errorForm.render('name') }}
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
                         <input type="email" class="form-control" id="email" name="email" required value="{{ params['email'] }}">
+                        {{ errorForm.render('email') }}
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Senha:</label>
                         <input type="password" class="form-control" id="password" name="password" required>
+                        {{ errorForm.render('password') }}
                     </div>
                     <div class="mb-3 d-flex justify-content-end">
                         <a href="/login" class="auth-link">Já tem uma conta? Entre agora</a>

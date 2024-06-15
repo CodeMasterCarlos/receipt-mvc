@@ -4,6 +4,10 @@ use Codemastercarlos\Receipt\Bootstrap\Bootstrap;
 use Codemastercarlos\Receipt\Bootstrap\Config\SettingsFileConfig;
 use Codemastercarlos\Receipt\Bootstrap\HttpDiContainer;
 use Codemastercarlos\Receipt\Bootstrap\HttpError;
+use Codemastercarlos\Receipt\Bootstrap\Logger;
+use Codemastercarlos\Receipt\Bootstrap\Provider\BackPageExceptionProvider;
+use Codemastercarlos\Receipt\Bootstrap\Provider\FinishRequestProvider;
+use Codemastercarlos\Receipt\Exception\BackPageException;
 use Psr\Container\ContainerInterface;
 
 $_SESSION ?? session_start();
@@ -29,7 +33,13 @@ try {
     new Bootstrap(
         new HttpDiContainer($diContainer, $routes, $GLOBALS['middlewares'])
     );
+
+    new FinishRequestProvider();
+} catch (BackPageException $e) {
+    new BackPageExceptionProvider();
 } catch (Throwable $e) {
+    $logger = new Logger();
+    $logger->logger()->error($e->getMessage(), ["exception" => $e]);
     new Bootstrap(
         new HttpError($e)
     );

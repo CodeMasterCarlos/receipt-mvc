@@ -3,6 +3,7 @@
 namespace Codemastercarlos\Receipt\Views;
 
 use Codemastercarlos\Receipt\Bootstrap\FlasherMessage;
+use Codemastercarlos\Receipt\Bootstrap\ValidationRequest;
 
 class Utils
 {
@@ -22,6 +23,11 @@ class Utils
     public function getMessage(): array
     {
         return $this->getFlasherMessage();
+    }
+
+    public function messageError($attribute): ?string
+    {
+        return (new ValidationRequest())->getError($attribute);
     }
 
     public function valueParams(): array

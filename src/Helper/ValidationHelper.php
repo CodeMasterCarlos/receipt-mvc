@@ -2,6 +2,7 @@
 
 namespace Codemastercarlos\Receipt\Helper;
 
+use Codemastercarlos\Receipt\Bootstrap\ValidationRequest;
 use Codemastercarlos\Receipt\Exception\InvalidValidationException;
 use Codemastercarlos\Receipt\Interfaces\Bootstrap\Validation\Rule;
 
@@ -71,6 +72,9 @@ class ValidationHelper
         if (count($this->errors) === 0) {
             return;
         }
+
+        $validationRequest = new ValidationRequest();
+        $validationRequest->saveErrors($this->errors);
 
         throw new InvalidValidationException("Formulário inválido.");
     }
