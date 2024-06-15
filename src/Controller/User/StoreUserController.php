@@ -6,8 +6,11 @@ use Codemastercarlos\Receipt\Bootstrap\FlasherMessage;
 use Codemastercarlos\Receipt\Bootstrap\SessionAuth;
 use Codemastercarlos\Receipt\Bootstrap\View;
 use Codemastercarlos\Receipt\Entity\User;
-use Codemastercarlos\Receipt\Helper\Validation;
+use Codemastercarlos\Receipt\Helper\HydrateHelper;
+use Codemastercarlos\Receipt\Helper\ValidationHelper;
 use Codemastercarlos\Receipt\Repository\UserRepository;
+use Codemastercarlos\Receipt\Rules\NullableMinRule;
+use Codemastercarlos\Receipt\Rules\UpdateUserEmailRule;
 use DateTimeImmutable;
 use Exception;
 use Nyholm\Psr7\Response;
@@ -31,22 +34,18 @@ class StoreUserController implements RequestHandlerInterface
         $bodyParams = $request->getParsedBody();
         $userAuthSession = $_SESSION['receipt']['user']['value'];
         $location = "/user";
-        /** @var Validation $validation */
-        [$name, $email, $password, $validation] = $this->validateParams($bodyParams);
 
-        if ($validation->validationWasError()) {
-            return new Response(303, ["Location" => $location]);
-        }
+        $validation = new ValidationHelper($bodyParams, [
+            'name' => ['required', 'min:3', 'max:255'],
+            'email' => ['required', 'email', 'max:255', new UpdateUserEmailRule($this->repository, $userAuthSession['email'])],
+            'password' => [new NullableMinRule(8), 'max:255'],
+        ]);
+
+        $name = HydrateHelper::hydrateString($validation->getAttribute('name'));
+        $email = HydrateHelper::hydrateString($validation->getAttribute('email'));
+        $password = $validation->getAttribute('password');
 
         $userData = $this->repository->getFromId($userAuthSession['id']);
-
-        if (($email !== $userAuthSession['email']) && $this->validateEmailExist($email)) {
-            $this->flasherCreate(
-                "error",
-                "Email já cadastrado. Por favor, use um endereço de e-mail diferente."
-            );
-            return new Response(303, ['Location' => $location]);
-        }
 
         $hashPassword = empty($password) ? $userData['password'] : password_hash($password, PASSWORD_ARGON2ID);
         $user = new User($name, $email, $hashPassword, new DateTimeImmutable($userData['date_created']));
@@ -70,42 +69,5 @@ class StoreUserController implements RequestHandlerInterface
         }
 
         return new Response(302, ['Location' => $location]);
-    }
-
-    private function validateParams($params): array
-    {
-        $validation = new Validation($params);
-
-        $name = $validation->validate(
-            'name',
-            FILTER_VALIDATE_REGEXP,
-            ["options" => ["regexp" => "/^.{3}?.*/"]],
-            ["message" => "O nome deve ter pelo menos 3 caracteres."]
-        );
-
-        $email = $validation->validate(
-            'email',
-            FILTER_VALIDATE_EMAIL,
-            messageError: ["message" => "Por favor, insira um e-mail válido."]
-        );
-
-        $password = $params['password'];
-        if (empty($password) === false) {
-            $password = $validation->validate(
-                'password',
-                FILTER_VALIDATE_REGEXP,
-                ["options" => ["regexp" => "/^.{8}?.*/"]],
-                ['message' => "A senha deve ter pelo menos 8 caracteres."],
-                false,
-            );
-        }
-
-        return [$name, $email, $password, $validation];
-    }
-
-    private function validateEmailExist($email): bool
-    {
-        $user = $this->repository->getFromEmail($email);
-        return $user !== false;
     }
 }
