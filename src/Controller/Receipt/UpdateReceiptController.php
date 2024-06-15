@@ -10,6 +10,7 @@ use Codemastercarlos\Receipt\Helper\ValidationHelper;
 use Codemastercarlos\Receipt\Repository\ReceiptRepository;
 use Codemastercarlos\Receipt\Rules\ExistReceiptRule;
 use Codemastercarlos\Receipt\Rules\ImageRule;
+use Codemastercarlos\Receipt\Rules\NullableDateRule;
 use Codemastercarlos\Receipt\Services\ReceiptService;
 use DateTimeImmutable;
 use Exception;
@@ -42,7 +43,7 @@ class UpdateReceiptController implements RequestHandlerInterface
         $validation = new ValidationHelper($params, [
             'id' => ['required', 'int-receipt', new ExistReceiptRule($this->repository, $idUser)],
             'title' => ['required', 'min:5', 'max:255'],
-            'date' => ['required', 'date'],
+            'date' => [new NullableDateRule()],
             'image' => [new ImageRule(false)],
         ]);
 

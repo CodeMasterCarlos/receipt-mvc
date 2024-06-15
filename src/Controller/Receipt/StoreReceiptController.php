@@ -7,6 +7,7 @@ use Codemastercarlos\Receipt\Entity\Receipt;
 use Codemastercarlos\Receipt\Helper\HydrateHelper;
 use Codemastercarlos\Receipt\Helper\ValidationHelper;
 use Codemastercarlos\Receipt\Repository\ReceiptRepository;
+use Codemastercarlos\Receipt\Rules\NullableDateRule;
 use Codemastercarlos\Receipt\Services\ReceiptService;
 use DateTimeImmutable;
 use Exception;
@@ -38,7 +39,7 @@ class StoreReceiptController implements RequestHandlerInterface
 
         $validation = new ValidationHelper($params, [
             'title' => ['required', 'min:5', 'max:255'],
-            'date' => ['required', 'date'],
+            'date' => [new NullableDateRule()],
             'image' => ['required', 'image'],
         ]);
 
