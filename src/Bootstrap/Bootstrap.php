@@ -7,8 +7,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Bootstrap
 {
-    use Logger;
-
     private readonly HttpInterface $http;
 
     public function __construct(

@@ -6,9 +6,9 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger as LoggerMonolog;
 
-trait Logger
+class Logger
 {
-    private function logger(): LoggerMonolog
+    public function logger(): LoggerMonolog
     {
         $logger = new LoggerMonolog('web');
         $logger->pushHandler(new StreamHandler(__DIR__ . '/../../logs/record.log', Level::Debug));
